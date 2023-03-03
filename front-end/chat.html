@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
 	<link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="ressources/css/loader.css">
+	<link rel="stylesheet" href="ressources/css/modal.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"
 		integrity="sha512-N5JbZMETkl+0SZh5l8OA2VxSfF120owfQyy54iAXTJIKuqAn3A9TrNz1ypB55o8aSU5MxaodEgv74wGUvgUynQ=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -43,7 +44,7 @@
 					<li class="item active">
 						<a href="#">
 							<i class="fa fa-user"></i>
-							<span>Team chat</span>
+							<span>Général</span>
 							<i class="fa fa-times"></i>
 						</a>
 					</li>
@@ -62,17 +63,11 @@
 				</div>
 			</div>
 			<div class="chat-area">
-				<div class="title"><b>Général</b><i class="fa fa-search"></i></div>
+				<div class="title"><b id="chat-title">Général : <span id="nb-messages"> messages</span></b><i class="fa fa-search"></i></div>
 				<div class="chat-list">
 					<ul id="chat-list">
 						<li class="">
-							<div class="name">
-								<span class="">Christian Smith</span>
-							</div>
-							<div class="message">
-								<p>World</p>
-								<span class="msg-time">5:01 pm</span>
-							</div>
+							
 						</li>
 					</ul>
 				</div>
@@ -108,5 +103,25 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal__container" id="modal-container">
+        <div class="modal__content modal__content-effect" id="modal-content">
+            <div class="modal__close close-modal" title="Close">
+                <i class='bx bx-x'></i>
+            </div>
+
+            <h1 class="modal__title" id="modal-username"></h1>
+			
+			<p class="modal__description">id : <span id="modal-id"></span></p>
+            <p class="modal__description"><span id="modal-nb-messages"></span> messages envoyées</p>
+
+			 <button class="button-default modal__button-width" id=""> 
+                Conversation privée
+            </button>
+
+            <button class="modal__button-link close-modal" id="modal-close-button"> 
+                Close
+            </button>
+        </div>
+    </div>
 </body>
 </html>

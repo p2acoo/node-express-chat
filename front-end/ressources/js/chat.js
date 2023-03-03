@@ -1,38 +1,64 @@
 let userInfo = {};
+let numberOfMessage = 0;
 
 (function () {
-    const server = 'http://127.0.0.1:3000'
+    const server = 'http://172.20.10.10:3000'
     const socket = io(server, { auth: { token: localStorage.getItem('token') } });
-
-    socket.on('notification', (data) => {
-        console.log('Message depuis le seveur:', data);
-    })
 
     socket.on('message', (data) => {
         console.log(data);
         let message = data.message;
         let username = data.username;
         let userId = data.userId;
+        numberOfMessage++;
+        document.getElementById('nb-messages').innerHTML = numberOfMessage;
+
         addMessage(message, username, userId, new Date());
 
     })
 
+    document.getElementById("modal-close-button").addEventListener('click', closeModal)
+
+    function closeModal() {
+        const modalContainer = document.getElementById('modal-container')
+        modalContainer.classList.remove('show-modal');
+    }
+
     socket.on('listConnectedUsers', (data) => {
-        console.log("listConnectedUsers", data);
         let list = document.getElementById('list-connected-users');
         list.innerHTML = '';
+        listUsers = data;
         data.forEach((user) => {
             let li = document.createElement('li');
-            li.innerHTML = `<li><span class="status online"><i class="fa fa-circle-o"></i></span><span>${user}</span>
+            li.innerHTML = `<li><span class="status online"><i class="fa fa-circle-o"></i></span><span>${user.username}</span>
 							</li>`;
+            li.addEventListener('click', () => {
+                fetch(`${server}/api/user/${user.userId}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                }).then((res) => {
+
+                    return res.json()
+                }
+                ).then((data) => {
+                    document.getElementById('modal-username').innerHTML = data.username;
+                    document.getElementById('modal-nb-messages').innerHTML = data.numberOfMessages;
+                    document.getElementById('modal-id').innerHTML = data.id;
+
+                    document.getElementById('modal-container').classList.add('show-modal');
+                })
+            })
             list.appendChild(li);
+
         }
         )
     })
 
 
 
-    fetch(`${server}/api/user/getSelf`,
+    fetch(`${server}/api/user/self`,
         {
             method: 'GET',
             headers: {
@@ -58,6 +84,9 @@ let userInfo = {};
             }).then((resSelf) => {
                 return resSelf.json()
             }).then(async (dataMessage) => {
+                numberOfMessage = dataMessage.length;
+                document.getElementById('nb-messages').innerHTML = numberOfMessage;
+
                 await dataMessage.forEach((message) => {
                     addMessage(message.message, message.username, message.userId, message.timestamp);
                 })

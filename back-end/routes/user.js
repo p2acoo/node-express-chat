@@ -1,8 +1,9 @@
 const express = require('express');
-const { getSelf } = require('../controllers/user');
+const { getSelf, getOneUser } = require('../controllers/user');
 const router = express.Router();
 const middleware = require('../middleware/auth');
 
-router.get('/getSelf', middleware, getSelf);
+router.get('/self', middleware, getSelf);
+router.get('/:id', middleware, getOneUser)
 
 module.exports = router;

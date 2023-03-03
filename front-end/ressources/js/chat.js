@@ -14,10 +14,10 @@ let numberOfMessage = 0;
         document.getElementById('nb-messages').innerHTML = numberOfMessage;
 
         addMessage(message, username, userId, new Date());
-
     })
 
     document.getElementById("modal-close-button").addEventListener('click', closeModal)
+    document.getElementById("modal-private").addEventListener('click', createNewPrivateChat)
 
     function closeModal() {
         const modalContainer = document.getElementById('modal-container')
@@ -111,6 +111,16 @@ let numberOfMessage = 0;
         let message = document.getElementById('message-input').value;
         document.getElementById('message-input').value = '';
         socket.emit('sendMessage', { message });
+    }
+
+
+    function createNewPrivateChat() {
+        let userId = document.getElementById('modal-id').innerHTML;
+        let username = document.getElementById('modal-username').innerHTML;
+
+        let messageContainer = document.getElementById('chat-list');
+        //clear chat
+        messageContainer.innerHTML = '';
     }
 
     function addMessage(message, username, userId, timestamp) {

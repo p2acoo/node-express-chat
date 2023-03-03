@@ -10,7 +10,7 @@ module.exports = function (io) {
       io.emit('notification', { type: 'removed_user', data: socket.id });
     });
 
-    socket.on('...', (msg) => {
+    socket.on('message', (msg) => {
 
     });
   })

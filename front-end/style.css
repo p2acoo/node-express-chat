@@ -267,6 +267,7 @@ b {
   bottom: 44px;
   overflow-y: auto;
   outline: none;
+  scroll-behavior: smooth;
 }
 .chat-area .chat-list > div > .jspPane {
   margin-left: 0 !important;
@@ -303,6 +304,7 @@ b {
 }
 .chat-area ul .message > p {
   line-height: 20px;
+  overflow-wrap: break-word;
 }
 .chat-area ul .message > p > .blue-label {
   background: #6ea0ff;

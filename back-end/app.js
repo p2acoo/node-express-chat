@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 // export one function that gets called once as the server is being initialized
 module.exports = function (app, server) {
@@ -30,6 +31,20 @@ module.exports = function (app, server) {
         }
     })
 
+    io.use((socket, next) => {
+        const token = socket.handshake.auth.token;
+        if (token) {
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            const userId = decodedToken.userId;
+            const username = decodedToken.username;
+            socket.userId = userId;
+            socket.username = username;
+            next();
+        } else {
+            next(new Error('Authentication error'));
+        }
+    });
+
     require('./socket/chat')(io);
 
     app.use(function (req, res, next) { req.io = io; next(); });
@@ -39,6 +54,9 @@ module.exports = function (app, server) {
 
     const userRoutes = require('./routes/user');
     app.use('/api/user', userRoutes);
+
+    const messageRoutes = require('./routes/message');
+    app.use('/api/message', messageRoutes);
 
     app.get('/test', (req, res, next) => {
         res.status(200).json({ hello: 'world' })
